@@ -1,0 +1,42 @@
+" 关闭 vi 兼容
+set nocompatible
+
+" 历史记录
+set history=1000
+
+" 文件类型检测
+filetype on
+filetype plugin on
+filetype indent on
+
+" 文件被外部修改时，自动更新
+set autoread
+
+" 语法高亮
+syntax enable
+
+" 高亮当前行
+set cursorline
+
+" 行号
+set number
+
+" tab 相关
+set shiftwidth=4
+set tabstop=4
+set expandtab
+set smarttab
+set softtabstop=4
+set smartindent
+set wrap
+
+" arch pacman packages
+" vim
+" vim-airline (vim-plugins)
+" vim-airline-themes (vim-plugins)
+" vim-fugitive (vim-plugins)
+" vim-molokai (vim-plugins)
+" vim-runtime
+" vim-syntastic (vim-plugins)
+" vim-youcompleteme-git
+
