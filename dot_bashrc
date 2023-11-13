@@ -124,7 +124,7 @@ function up() {
 
 export PATH=$HOME/scripts:$HOME/.local/bin:/usr/local/bin:$PATH
 export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
-export EDITOR='vim' ALTERNATE_EDITOR='vim' VISUAL='gvim'
+export EDITOR='vim' ALTERNATE_EDITOR='vim'
 
 # Bash History
 export HISTCONTROL=$HISTCONTROL
@@ -152,8 +152,6 @@ alias lal='ls -alh'
 alias la='ls -A'
 alias pms='sudo pm-suspend'
 alias psg='ps -A | grep'
-alias se='sudo gvim'
-alias e='gvim'
 alias smi='sudo make install'
 alias l='ls -CF'
 
@@ -178,8 +176,8 @@ alias m='make'
 
 # Some more, to avoid mistakes
 alias rm='rm -i'
-alias cp='cp -i'
-alias mv='mv -i'
+#alias cp='cp -i'
+#alias mv='mv -i'
 
 # Git Commands
 # Add and Commit are used as functions
@@ -271,6 +269,6 @@ alias gbv='git branch -vv'
 
 # Useful when working on a branch and 
 # want to summarize changes against master
-alias gdmno='git diff master  --name-only'
+alias gdmno='git diff master --name-only'
 
 # User specific aliases and functions
