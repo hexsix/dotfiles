@@ -35,6 +35,7 @@ local user_opts = {
     seekbarkeyframes = true,    -- use keyframes when dragging the seekbar
     title = '${media-title}',   -- string compatible with property-expansion
                                 -- to be shown as OSC title
+    idlescreen = true,          -- show mpv logo on idle
     showonpause = true,            -- show title and no hide timeout on pause
     timetotal = false,              -- display total time instead of remaining time?
     timems = false,             -- display timecodes with milliseconds
@@ -1067,7 +1068,9 @@ layouts["reduced"] = function ()
 
     -- area for show/hide
     add_area('showhide', 0, osc_param.playresy-user_opts.deadzone, osc_param.playresx, osc_param.playresy)
+    if window_controls_enabled() then
     add_area('showhide_wc', osc_param.playresx*0.5, 0, osc_param.playresx, 48)
+    end
     
     -- fetch values
     local osc_w, osc_h=
@@ -1207,7 +1210,9 @@ layouts["original"] = function ()
 
     -- area for show/hide
     add_area('showhide', 0, osc_param.playresy-user_opts.deadzone, osc_param.playresx, osc_param.playresy)
+    if window_controls_enabled() then
     add_area('showhide_wc', osc_param.playresx*0.5, 0, osc_param.playresx, 48)
+    end
     
     -- fetch values
     local osc_w, osc_h=
@@ -1375,7 +1380,9 @@ layouts["mid"] = function ()
 
     -- area for show/hide
     add_area('showhide', 0, osc_param.playresy-user_opts.deadzone, osc_param.playresx, osc_param.playresy)
+    if window_controls_enabled() then
     add_area('showhide_wc', osc_param.playresx*0.5, 0, osc_param.playresx, 48)
+    end
     
     -- fetch values
     local osc_w, osc_h=
@@ -2373,7 +2380,7 @@ end
 function tick()
     if (not state.enabled) then return end
 
-    if (state.idle) then
+    if (state.idle) and user_opts.idlescreen then
         show_logo()
         -- render idle message
         msg.trace('idle message')
@@ -2457,6 +2464,7 @@ mp.observe_property('fullscreen', 'bool',
 mp.observe_property('mute', 'bool',
     function(name, val)
         state.mute = val
+	request_tick()
     end
 )
 mp.observe_property('volume', 'number',
@@ -2467,6 +2475,7 @@ mp.observe_property('volume', 'number',
 		else
 			state.proc_volume = val
 		end
+		request_tick()
 	end
 )
 mp.observe_property('border', 'bool',
@@ -2487,6 +2496,7 @@ mp.observe_property('idle-active', 'bool',
         request_tick()
     end
 )
+mp.observe_property('ontop', nil, request_tick)
 mp.observe_property('pause', 'bool', pause_state)
 mp.observe_property('demuxer-cache-state', 'native', cache_state)
 mp.observe_property('vo-configured', 'bool', function(name, val)
@@ -2546,8 +2556,6 @@ function always_on(val)
     if state.enabled then
         if val then
             show_osc()
-        else
-            hide_osc()
         end
     end
 end
@@ -2579,7 +2587,7 @@ function visibility_mode(mode, no_osd)
     end
     
     user_opts.visibility = mode
-    utils.shared_script_property_set("osc-visibility", mode)
+    mp.set_property_native("osc-visibility", mode)
     
     if not no_osd and tonumber(mp.get_property('osd-level')) >= 1 then
         mp.osd_message('OSC visibility: ' .. mode)
@@ -2609,7 +2617,7 @@ function idlescreen_visibility(mode, no_osd)
         user_opts.idlescreen = false
     end
 
-    utils.shared_script_property_set("osc-idlescreen", mode)
+    mp.set_property_native("osc-idlescreen", mode)
 
     if not no_osd and tonumber(mp.get_property("osd-level")) >= 1 then
         mp.osd_message("OSC logo visibility: " .. tostring(mode))
